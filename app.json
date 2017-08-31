@@ -1,5 +1,31 @@
 {
   "expo": {
-    "sdkVersion": "20.0.0"
+    "name": "Ruah",
+    "description": "Ruah is a place for buyers and sellers to connect, and strengthen relationships.",
+    "slug": "ruah-mobile",
+    "privacy": "public",
+    "sdkVersion": "20.0.0",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "primaryColor": "#1BBCBE",
+    "icon": "./assets/icons/app-icon.png",
+    "notification": {
+      "icon": "./assets/icons/notification-icon.png",
+      "color": "#9CE8E6"
+    },
+    "loading": {
+      "icon": "./assets/images/logo.png",
+      "hideExponentText": true
+    },
+    "packagerOpts": {
+      "assetExts": ["ttf"]
+    },
+    "ios": {
+      "supportsTablet": true,
+      "buildIdentifier": "com.ruah.ruahmobile",
+    },
+    "android": {
+      "package": "com.ruah.ruahmobile",
+    }
   }
 }
