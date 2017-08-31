@@ -1,5 +1,6 @@
 import { maybeProvideDispatch } from '../../store';
 import { info } from '../actions/logging';
+import { setApiAuthToken } from '../actions/app';
 
 class Api {
   static headers() {
@@ -36,10 +37,29 @@ class Api {
 
       const json = response.json();
       if (response.ok) {
+        maybeSetAuthToken(response);
         return json;
       }
       return json.then((err) => { throw err; });
     });
+  }
+}
+
+function maybeSetAuthToken(response) {
+  const cookies = response.headers.map['set-cookie'];
+  if (!cookies || cookies.length === 0) {
+    return;
+  }
+  for (let i = 0; i < cookies.length; i += 1) {
+    const cookie = cookies[i];
+    const match = cookie.match('([A-F]|[0-9]){16,}');
+    if (match) {
+      const dispatch = maybeProvideDispatch();
+      if (dispatch) {
+        dispatch(setApiAuthToken(match[0]));
+      }
+      break;
+    }
   }
 }
 

@@ -38,6 +38,7 @@ export default function userReducer(state = initialState, action) {
       const user = state.get('user').toJS();
       user.authenticated = true;
       return state
+        .set('user', fromJS(user))
         .set('loginComponent', fromJS(loginComponent));
     }
     case SUBMIT_LOGIN_FAIL: {
