@@ -8,6 +8,10 @@ const sagaMiddleware = createSagaMiddleware();
 /* global __DEV__ */
 const loggerMiddleware = createLogger({ predicate: () => __DEV__ });
 
+let store = null;
+
+export const maybeProvideDispatch = () => (store ? store.dispatch : null);
+
 export default function configStore(initialState = {}) {
   const middlewares = [
     loggerMiddleware,
@@ -17,7 +21,7 @@ export default function configStore(initialState = {}) {
     applyMiddleware(...middlewares)
   );
 
-  const store = createStore(createReducer(), initialState, enhancer);
+  store = createStore(createReducer(), initialState, enhancer);
   store.runSaga = () => bootstrapSagas(sagaMiddleware.run);
 
   return store;

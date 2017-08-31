@@ -1,13 +1,13 @@
-import { takeLatest } from 'redux-saga';
-import { put } from 'redux-saga/effects';
+import { put, call, takeLatest } from 'redux-saga/effects';
 import { Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import { LOAD_APP_ASSETS } from '../actions/types';
 import { loadAppAssetsSuccess } from '../actions/app';
+import { info, warn } from '../actions/logging';
 
 function* loadAssetsAsync() {
   try {
-    Promise.all([
+    yield call(() => Promise.all([
       Asset.loadAsync([
         require('../../assets/images/robot-dev.png'), // eslint-disable-line global-require
         require('../../assets/images/robot-prod.png'), // eslint-disable-line global-require
@@ -19,15 +19,16 @@ function* loadAssetsAsync() {
         // to remove this if you are not using it in your app
         { 'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf') }, // eslint-disable-line global-require
       ]),
-    ]).then(() => put(loadAppAssetsSuccess()));
+    ]));
+    yield put(loadAppAssetsSuccess());
   } catch (e) {
     // In this case, you might want to report the error to your error
     // reporting service, for example Sentry
-    console.warn(
-      'There was an error caching assets (see: App.js), perhaps due to a ' +
+    yield put(warn(
+      'There was an error caching assets (see: app/sagas/app.js), perhaps due to a ' +
         'network timeout, so we skipped caching. Reload the app to try again.'
-    );
-    console.log(e);
+    ));
+    yield put(info(e));
   }
 }
 
