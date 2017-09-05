@@ -10,7 +10,8 @@
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts",
     "lint:js": "npm run lint:eslint -- . ",
-    "lint:staged": "lint-staged"
+    "lint:staged": "lint-staged",
+    "start": "exp start -i --host lan --dev"
   },
   "jest": {
     "preset": "jest-expo"
@@ -113,6 +114,7 @@
   "devDependencies": {
     "babel-eslint": "7.1.0",
     "babel-jest": "20.0.1",
+    "babel-plugin-inline-import": "^2.0.6",
     "babel-preset-react-native": "^3.0.2",
     "eslint": "3.9.0",
     "eslint-config-airbnb": "12.0.0",

@@ -35,12 +35,12 @@ class Api {
         dispatch(info(response));
       }
 
-      const json = response.json();
       if (response.ok) {
+        const json = response.json();
         maybeSetAuthToken(response);
         return json;
       }
-      return json.then((err) => { throw err; });
+      return response.status;
     });
   }
 }

@@ -2,7 +2,12 @@
   "presets": ["react-native"],
   "env": {
     "development": {
-      "plugins": ["transform-react-jsx-source"]
+      "plugins": [
+        "transform-react-jsx-source",
+        ["babel-plugin-inline-import", {
+          "extensions": [ ".sql" ]
+        }]
+      ]
     }
   }
 }

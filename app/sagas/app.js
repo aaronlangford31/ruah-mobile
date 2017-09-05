@@ -1,8 +1,9 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
-import { LOAD_APP_ASSETS } from '../actions/types';
-import { loadAppAssetsSuccess } from '../actions/app';
+import AppDb from '../../db';
+import { LOAD_APP_ASSETS, LOAD_SQL_STORE } from '../actions/types';
+import { loadAppAssetsSuccess, setSqlStore } from '../actions/app';
 import { info, warn } from '../actions/logging';
 
 function* loadAssetsAsync() {
@@ -32,10 +33,20 @@ function* loadAssetsAsync() {
   }
 }
 
+function* loadSqlStore() {
+  const db = new AppDb();
+  yield put(setSqlStore(db));
+}
+
 function* watchLoadAppAssets() {
   yield takeLatest(LOAD_APP_ASSETS, loadAssetsAsync);
 }
 
+function* watchLoadSqlStore() {
+  yield takeLatest(LOAD_SQL_STORE, loadSqlStore);
+}
+
 export default [
   watchLoadAppAssets,
+  watchLoadSqlStore,
 ];

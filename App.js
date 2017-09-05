@@ -9,7 +9,7 @@ import LoginScreen from './screens/LoginScreen';
 import configureStore from './store';
 import appSelectors from './app/selectors/app';
 import userSelectors from './app/selectors/user';
-import { loadAppAssets } from './app/actions/app';
+import { loadAppAssets, loadSqlStore } from './app/actions/app';
 import { appSubmitLogin } from './app/actions/user';
 
 const initialState = { };
@@ -21,12 +21,14 @@ class App extends React.Component {
     skipLoadingScreen: PropTypes.bool,
     assetsAreLoaded: PropTypes.bool,
     loadAppAssets: PropTypes.func,
+    loadSqlStore: PropTypes.func,
     user: PropTypes.object,
     appSubmitLogin: PropTypes.func,
   }
 
   componentWillMount() {
     this.props.loadAppAssets();
+    this.props.loadSqlStore();
     this.props.appSubmitLogin();
   }
 
@@ -55,6 +57,9 @@ function mapDispatchToProps(dispatch) {
     },
     appSubmitLogin: () => {
       dispatch(appSubmitLogin());
+    },
+    loadSqlStore: () => {
+      dispatch(loadSqlStore());
     },
   };
 }

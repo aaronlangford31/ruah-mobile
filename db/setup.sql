@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS UserProp (
+  PropName TEXT PRIMARY KEY NOT NULL,
+  PropValue TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Conversation (
+  ConversationId TEXT PRIMARY KEY NOT NULL,
+  RecipientId TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Message (
+  ConversationId TEXT NOT NULL,
+  Epoch INTEGER NOT NULL,
+  PRIMARY KEY (ConversationId, Epoch)
+);

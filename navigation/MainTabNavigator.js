@@ -1,21 +1,20 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { TabNavigator as tabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
-
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
-export default TabNavigator(
+export default tabNavigator(
   {
-    Home: {
-      screen: HomeScreen,
-    },
-    Links: {
+    Feed: {
       screen: LinksScreen,
+    },
+    Messages: {
+      screen: HomeScreen,
     },
     Settings: {
       screen: SettingsScreen,
@@ -27,15 +26,11 @@ export default TabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case 'Home':
-            iconName = Platform.OS === 'ios'
-              ? `ios-information-circle${focused ? '' : '-outline'}`
-              : 'md-information-circle';
+          case 'Messages':
+            iconName = 'md-mail'
             break;
-          case 'Links':
-            iconName = Platform.OS === 'ios'
-              ? `ios-link${focused ? '' : '-outline'}`
-              : 'md-link';
+          case 'Feed':
+            iconName = 'md-globe'
             break;
           case 'Settings':
             iconName = Platform.OS === 'ios'
@@ -56,5 +51,6 @@ export default TabNavigator(
     tabBarPosition: 'bottom',
     animationEnabled: false,
     swipeEnabled: false,
+    initialRouteName: 'Messages',
   }
 );

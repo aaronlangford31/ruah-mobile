@@ -1,6 +1,8 @@
 const APP_ACTION = 'ruah/app';
 export const LOAD_APP_ASSETS = `${APP_ACTION}/LOAD_APP_ASSETS`;
 export const LOAD_APP_ASSETS_SUCCESS = `${APP_ACTION}/LOAD_APP_ASSETS_SUCCESS`;
+export const LOAD_SQL_STORE = `${APP_ACTION}/LOAD_SQL_STORE`;
+export const SET_SQL_STORE = `${APP_ACTION}/SET_SQL_STORE`;
 export const SET_API_AUTH_TOKEN = `${APP_ACTION}/SET_API_AUTH_TOKEN`;
 
 const USER_ACTION = 'ruah/user';
