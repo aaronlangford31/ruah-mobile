@@ -12,6 +12,8 @@ import userSelectors from './app/selectors/user';
 import { loadAppAssets, loadSqlStore } from './app/actions/app';
 import { appSubmitLogin } from './app/actions/user';
 
+GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
+
 const initialState = { };
 const store = configureStore(initialState);
 store.runSaga();

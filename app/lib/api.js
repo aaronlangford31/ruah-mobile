@@ -9,20 +9,24 @@ class Api {
       'Content-Type': 'application/json',
       dataType: 'json',
       'X-Requested-With': 'XMLHttpRequest',
+      credentials: 'include',
     };
   }
 
-  static get(route) {
-    return this.xhr(route, null, 'GET');
+  static get(route, auth) {
+    return this.xhr(route, null, 'GET', auth);
   }
 
-  static post(route, params) {
-    return this.xhr(route, params, 'POST');
+  static post(route, params, auth) {
+    return this.xhr(route, params, 'POST', auth);
   }
 
-  static xhr(route, params, verb) {
+  static xhr(route, params, verb, auth) {
     const options = Object.assign({ method: verb }, params ? { body: JSON.stringify(params) } : null);
     options.headers = Api.headers();
+    if (auth) {
+      options.headers.Cookie = `r-auth-ticket=${auth};`;
+    }
     const dispatch = maybeProvideDispatch();
     if (dispatch) {
       dispatch(info({

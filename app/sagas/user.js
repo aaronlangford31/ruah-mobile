@@ -1,7 +1,7 @@
 import { put, call, select, takeLatest } from 'redux-saga/effects';
 import { APP_SUBMIT_LOGIN, USER_SUBMIT_LOGIN, SUBMIT_LOGIN_SUCCESS } from '../actions/types';
 import { submitLoginSuccess, submitLoginFail, setUserId, setPassword } from '../actions/user';
-import { info, warn, error } from '../actions/logging';
+import { error } from '../actions/logging';
 import UserApi from '../../api/user';
 
 function* appCheckAuthentication() {

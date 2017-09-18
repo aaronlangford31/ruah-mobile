@@ -11,5 +11,14 @@ CREATE TABLE IF NOT EXISTS Conversation (
 CREATE TABLE IF NOT EXISTS Message (
   ConversationId TEXT NOT NULL,
   Epoch INTEGER NOT NULL,
+  Author TEXT NOT NULL,
+  Content TEXT,
+  AttachmentsJSON TEXT,
   PRIMARY KEY (ConversationId, Epoch)
 );
+
+CREATE TABLE IF NOT EXISTS Store (
+  StoreId TEXT PRIMARY KEY NOT NULL,
+  Name TEXT NOT NULL,
+  ProfilePicUri TEXT NOT NULL
+)

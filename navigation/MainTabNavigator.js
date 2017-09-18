@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator as tabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
-import HomeScreen from '../screens/HomeScreen';
+import Messages from '../app/containers/Messages';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
@@ -14,7 +14,7 @@ export default tabNavigator(
       screen: LinksScreen,
     },
     Messages: {
-      screen: HomeScreen,
+      screen: Messages,
     },
     Settings: {
       screen: SettingsScreen,
