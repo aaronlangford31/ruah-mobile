@@ -11,7 +11,7 @@ const initialState = fromJS({
   appDb: null,
 });
 
-export default function userReducer(state = initialState, action) {
+export default function appReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_APP_ASSETS_SUCCESS: {
       return state

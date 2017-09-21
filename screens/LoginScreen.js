@@ -45,7 +45,6 @@ class LoginScreen extends React.Component {
           <TextInput
             value={this.props.user.userId}
             autoCapitalize={'none'}
-            autoFocus
             keyboardType={'email-address'}
             returnKeyType={'next'}
             style={styles.input}

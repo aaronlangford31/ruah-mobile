@@ -1,6 +1,6 @@
 import { SQLite } from 'expo';
 import _ from 'underscore';
-import setupScript from './setup.sql';
+import setupScript from './setupSql';
 
 const db = SQLite.openDatabase('ruah.db');
 db.transaction((tx) => {
@@ -129,6 +129,22 @@ export default class AppDb {
             });
             resolve();
           }, (err) => reject(err)
+        );
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  insertMessage(message) {
+    return new Promise((resolve, reject) => {
+      const row = [message.ChannelId, message.Timestamp, message.Author, message.Recipient, message.Content];
+      db.transaction((tx) => {
+        tx.executeSql(
+          'INSERT INTO Message (ConversationId, Epoch, Author, Recipient, Content) VALUES (?, ?, ?, ?, ?);',
+          row,
+          () => resolve(),
+          (err) => reject(err)
         );
       }, (err) => {
         reject(err);

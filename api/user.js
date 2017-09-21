@@ -9,4 +9,8 @@ export default class UserApi {
       persistAuthTicket: true,
     });
   }
+
+  static GetStore(auth) {
+    return Api.get(`${RUAH_API_BASE_PROD}/v1/store/get`, auth);
+  }
 }

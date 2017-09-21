@@ -6,6 +6,7 @@ import {
   SUBMIT_LOGIN_FAIL,
   SET_USER_ID,
   SET_PASSWORD,
+  SET_STORE,
 } from '../actions/types';
 
 const initialState = fromJS({
@@ -19,6 +20,7 @@ const initialState = fromJS({
     error: '',
     shouldDisplayError: false,
   }),
+  store: fromJS({}),
 });
 
 export default function userReducer(state = initialState, action) {
@@ -60,6 +62,10 @@ export default function userReducer(state = initialState, action) {
       user.password = action.val;
       return state
         .set('user', fromJS(user));
+    }
+    case SET_STORE: {
+      return state
+        .set('store', fromJS(action.store));
     }
     default: {
       return state;

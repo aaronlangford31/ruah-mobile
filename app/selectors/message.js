@@ -7,12 +7,24 @@ const selectConversations = () => createSelector(
   (state) => state.get('conversations').toJS(),
 );
 
+const selectCurrConversation = () => createSelector(
+  selectMessageState(),
+  (state) => state.get('currConversation').toJS(),
+);
+
 const selectConversationsComponent = () => createSelector(
   selectMessageState(),
   (state) => state.get('conversationsComponent').toJS(),
 );
 
+const selectCurrMessage = () => createSelector(
+  selectMessageState(),
+  (state) => state.get('currMessage').toJS(),
+);
+
 export default {
   selectConversations,
+  selectCurrConversation,
   selectConversationsComponent,
+  selectCurrMessage,
 };

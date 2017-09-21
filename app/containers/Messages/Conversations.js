@@ -5,7 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import _ from 'underscore';
 import moment from 'moment';
 import messageSelectors from '../../selectors/message';
-import { getConversations } from '../../actions/message';
+import { getConversations, setConversation } from '../../actions/message';
 import { Avatar } from 'react-native-elements';
 import { ScrollView, View, Text, TouchableHighlight, StyleSheet } from 'react-native';
 import colors from '../../../constants/Colors';
@@ -19,11 +19,17 @@ class ConversationScreen extends React.Component {
     conversations: PropTypes.array,
     conversationsComponent: PropTypes.object,
     getConversations: PropTypes.func,
+    setConversation: PropTypes.func,
     navigation: PropTypes.object,
   }
 
   componentWillMount() {
     this.props.getConversations();
+  }
+
+  onConversationClick(channelId) {
+    this.props.setConversation(channelId);
+    this.props.navigation.navigate('Conversation', { channelId });
   }
 
   loading() {
@@ -42,7 +48,7 @@ class ConversationScreen extends React.Component {
       <ScrollView style={styles.container}>
         {_.map(this.props.conversations, (conversation) =>
           <TouchableHighlight
-            onPress={() => this.props.navigation.navigate('conversation', { channelId: conversation.channelId })}
+            onPress={() => this.onConversationClick(conversation.ChannelId)}
             underlayColor={colors.foam}
             key={conversation.ChannelId}
           >
@@ -82,7 +88,7 @@ class ConversationScreen extends React.Component {
   }
 
   render() {
-    if (this.props.conversationsComponent.awaitingLocalData) {
+    if (this.props.conversationsComponent.awaitingLocalData || this.props.conversationsComponent.awaitingApiData) {
       return this.loading();
     } else if (!this.props.conversationsComponent && !this.props.conversations.length) {
       return this.emptyList();
@@ -100,6 +106,9 @@ function mapDispatchToProps(dispatch) {
   return {
     getConversations: () => {
       dispatch(getConversations());
+    },
+    setConversation: (channelId) => {
+      dispatch(setConversation(channelId));
     },
   };
 }

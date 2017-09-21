@@ -1,6 +1,6 @@
-import { put, call, select, takeLatest } from 'redux-saga/effects';
+import { put, call, fork, select, takeLatest } from 'redux-saga/effects';
 import { APP_SUBMIT_LOGIN, USER_SUBMIT_LOGIN, SUBMIT_LOGIN_SUCCESS } from '../actions/types';
-import { submitLoginSuccess, submitLoginFail, setUserId, setPassword } from '../actions/user';
+import { submitLoginSuccess, submitLoginFail, setUserId, setPassword, setStore } from '../actions/user';
 import { error } from '../actions/logging';
 import UserApi from '../../api/user';
 
@@ -63,12 +63,25 @@ function* persistUserData() {
   }
 }
 
+function* fetchStore() {
+  const state = yield select();
+  const appState = state.app.toJS();
+  const auth = appState.apiAuthToken;
+  const store = yield call(UserApi.GetStore, auth);
+  yield put(setStore(store));
+}
+
+function* onSubmitLoginSuccess() {
+  yield fork(persistUserData);
+  yield fork(fetchStore);
+}
+
 function* watchUserSubmitLogin() {
   yield takeLatest(USER_SUBMIT_LOGIN, userCheckAuthentication);
 }
 
 function* watchSubmitLoginSuccess() {
-  yield takeLatest(SUBMIT_LOGIN_SUCCESS, persistUserData);
+  yield takeLatest(SUBMIT_LOGIN_SUCCESS, onSubmitLoginSuccess);
 }
 
 export default [

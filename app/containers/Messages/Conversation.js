@@ -5,18 +5,24 @@ import { createStructuredSelector } from 'reselect';
 import _ from 'underscore';
 import moment from 'moment';
 import messageSelectors from '../../selectors/message';
-import { getConversations } from '../../actions/message';
+import userSelectors from '../../selectors/user';
+import { getConversations, setMessageContent, sendMessage } from '../../actions/message';
 import { Avatar } from 'react-native-elements';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TextInput, StyleSheet } from 'react-native';
+import Colors from '../../../constants/Colors';
 
 class ConversationScreen extends React.Component {
   static navigationOptions = {
-    title: 'Messages',
+    title: 'Conversation',
   };
 
   static propTypes = {
-    messages: PropTypes.array,
+    currConversation: PropTypes.object,
     conversationComponent: PropTypes.object,
+    message: PropTypes.object,
+    setMessageContent: PropTypes.func,
+    sendMessage: PropTypes.func,
+    store: PropTypes.object,
   }
 
   loading() {
@@ -33,13 +39,27 @@ class ConversationScreen extends React.Component {
   list() {
     return (
       <View style={styles.container}>
+        <View style={styles.messageComposeContainer}>
+          <TextInput
+            value={this.props.message.Content}
+            returnKeyType={'send'}
+            style={styles.input}
+            onChangeText={(val) => this.props.setMessageContent(val)}
+            onSubmitEditing={() => this.props.sendMessage()}
+            placeholder={'Send a message'}
+            underlineColorAndroid={Colors.foam}
+          />
+        </View>
         <ScrollView>
-          {_.map(this.props.messages, (message) =>
+          {_.map(this.props.currConversation.Messages, (message) =>
             <View style={styles.conversationContainer} key={message.Timestamp}>
               <Avatar
                 small
                 rounded
-                source={{ uri: 'https://reactnavigation.org/assets/react-nav-logo.svg' }}
+                source={{
+                  uri: message.Author === this.props.currConversation.RecipientId ?
+                    this.props.currConversation.RecipientProfilePic : this.props.store.ProfilePicUri,
+                }}
                 activeOpacity={0.7}
               />
               <View style={styles.conversationContentContainer}>
@@ -49,7 +69,7 @@ class ConversationScreen extends React.Component {
                 <Text>
                   {message.Content}
                 </Text>
-                <Text>
+                <Text style={{ color: Colors.ray }}>
                   {moment(message.Timestamp).fromNow()}
                 </Text>
               </View>
@@ -73,16 +93,18 @@ class ConversationScreen extends React.Component {
   render() {
     if (this.props.conversationComponent.awaitingLocalData) {
       return this.loading();
-    } else if (!this.props.conversationComponent && !this.props.messages.length) {
+    } else if (!this.props.conversationComponent && !this.props.currConversation.Messages.length) {
       return this.emptyConversation();
     }
     return this.list();
   }
 }
 
-const mapStateToProps = (state) => createStructuredSelector({
-  messages: messageSelectors.selectConversation(state),
-  conversationComponent: messageSelectors.selectConversationComponent(state),
+const mapStateToProps = () => createStructuredSelector({
+  currConversation: messageSelectors.selectCurrConversation(),
+  conversationComponent: messageSelectors.selectConversationsComponent(),
+  message: messageSelectors.selectCurrMessage(),
+  store: userSelectors.selectStore(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -90,13 +112,19 @@ function mapDispatchToProps(dispatch) {
     getConversations: () => {
       dispatch(getConversations());
     },
+    setMessageContent: (val) => {
+      dispatch(setMessageContent(val));
+    },
+    sendMessage: () => {
+      dispatch(sendMessage());
+    },
   };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
+    paddingTop: 8,
     backgroundColor: '#fff',
   },
   loadingContainer: {
@@ -125,6 +153,18 @@ const styles = StyleSheet.create({
   },
   conversationRecipientName: {
     fontWeight: 'bold',
+  },
+  messageComposeContainer: {
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingBottom: 8,
+  },
+  input: {
+    borderColor: Colors.ray,
+    backgroundColor: Colors.foam,
+    borderWidth: 1,
+    height: 40,
+    padding: 4,
   },
 });
 

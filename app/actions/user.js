@@ -5,6 +5,7 @@ import {
   SUBMIT_LOGIN_FAIL,
   SET_USER_ID,
   SET_PASSWORD,
+  SET_STORE,
 } from './types';
 
 export function appSubmitLogin() {
@@ -44,5 +45,12 @@ export function setPassword(val) {
   return {
     type: SET_PASSWORD,
     val,
+  };
+}
+
+export function setStore(store) {
+  return {
+    type: SET_STORE,
+    store,
   };
 }

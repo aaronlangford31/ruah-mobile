@@ -7,6 +7,11 @@ const selectUser = () => createSelector(
   (state) => state.get('user').toJS(),
 );
 
+const selectStore = () => createSelector(
+  selectUserState(),
+  (state) => state.get('store').toJS(),
+);
+
 const selectLoginComponent = () => createSelector(
   selectUserState(),
   (state) => state.get('loginComponent').toJS(),
@@ -14,5 +19,6 @@ const selectLoginComponent = () => createSelector(
 
 export default {
   selectUser,
+  selectStore,
   selectLoginComponent,
 };

@@ -1,4 +1,3 @@
-import React from 'react';
 import { StackNavigator as stackNavigator } from 'react-navigation';
 import Conversations from './Conversations';
 import Conversation from './Conversation';
@@ -22,8 +21,4 @@ const MessageNavigator = stackNavigator(
   }
 );
 
-export default class MessageComponent extends React.Component {
-  render() {
-    return <MessageNavigator />;
-  }
-}
+export default MessageNavigator;
