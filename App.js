@@ -31,7 +31,7 @@ class App extends React.Component {
   componentWillMount() {
     this.props.loadAppAssets();
     this.props.loadSqlStore();
-    this.props.appSubmitLogin();
+    // this.props.appSubmitLogin();
   }
 
   render() {
