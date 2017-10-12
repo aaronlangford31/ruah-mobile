@@ -80,9 +80,9 @@ class LoginScreen extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => createStructuredSelector({
-  user: userSelectors.selectUser(state),
-  loginComponent: userSelectors.selectLoginComponent(state),
+const mapStateToProps = () => createStructuredSelector({
+  user: userSelectors.selectUser(),
+  loginComponent: userSelectors.selectLoginComponent(),
 });
 
 function mapDispatchToProps(dispatch) {

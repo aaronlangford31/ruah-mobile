@@ -1,14 +1,13 @@
 import {
-  LOAD_APP_ASSETS,
+  LAUNCH_APP,
   LOAD_APP_ASSETS_SUCCESS,
   SET_API_AUTH_TOKEN,
-  LOAD_SQL_STORE,
   SET_SQL_STORE,
 } from './types';
 
-export function loadAppAssets() {
+export function launchApp() {
   return {
-    type: LOAD_APP_ASSETS,
+    type: LAUNCH_APP,
   };
 }
 
@@ -22,12 +21,6 @@ export function setApiAuthToken(token) {
   return {
     type: SET_API_AUTH_TOKEN,
     token,
-  };
-}
-
-export function loadSqlStore() {
-  return {
-    type: LOAD_SQL_STORE,
   };
 }
 

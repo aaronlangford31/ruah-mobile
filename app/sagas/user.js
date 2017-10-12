@@ -9,17 +9,21 @@ function* appCheckAuthentication() {
   const app = state.app.toJS();
   const db = app.appDb;
 
-  const userData = yield call(db.getUserProps, ['userId', 'password']);
-  if (userData.userId && userData.password) {
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(userData.userId)) {
-      yield put(submitLoginFail('Invalid email address.', false));
+  try {
+    const userData = yield call(db.getUserProps, ['userId', 'password']);
+    if (userData.userId && userData.password) {
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(userData.userId)) {
+        yield put(submitLoginFail('Invalid email address.', false));
+      }
+      yield call(UserApi.Authenticate, userData.userId, userData.password);
+      yield put(setUserId(userData.userId));
+      yield put(setPassword(userData.password));
+      yield put(submitLoginSuccess());
+    } else {
+      yield put(submitLoginFail('No user credentials found.', false));
     }
-    yield call(UserApi.Authenticate, userData.userId, userData.password);
-    yield put(setUserId(userData.userId));
-    yield put(setPassword(userData.password));
-    yield put(submitLoginSuccess());
-  } else {
-    yield put(submitLoginFail('No user credentials found.', false));
+  } catch (err) {
+    yield put(error(err));
   }
 }
 

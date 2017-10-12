@@ -9,8 +9,7 @@ import LoginScreen from './screens/LoginScreen';
 import configureStore from './store';
 import appSelectors from './app/selectors/app';
 import userSelectors from './app/selectors/user';
-import { loadAppAssets, loadSqlStore } from './app/actions/app';
-import { appSubmitLogin } from './app/actions/user';
+import { launchApp } from './app/actions/app';
 
 GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
@@ -22,16 +21,12 @@ class App extends React.Component {
   static propTypes = {
     skipLoadingScreen: PropTypes.bool,
     assetsAreLoaded: PropTypes.bool,
-    loadAppAssets: PropTypes.func,
-    loadSqlStore: PropTypes.func,
+    launchApp: PropTypes.func,
     user: PropTypes.object,
-    appSubmitLogin: PropTypes.func,
   }
 
   componentWillMount() {
-    this.props.loadAppAssets();
-    this.props.loadSqlStore();
-    // this.props.appSubmitLogin();
+    this.props.launchApp();
   }
 
   render() {
@@ -54,14 +49,8 @@ class App extends React.Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadAppAssets: () => {
-      dispatch(loadAppAssets());
-    },
-    appSubmitLogin: () => {
-      dispatch(appSubmitLogin());
-    },
-    loadSqlStore: () => {
-      dispatch(loadSqlStore());
+    launchApp: () => {
+      dispatch(launchApp());
     },
   };
 }

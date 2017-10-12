@@ -1,18 +1,21 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
-import { Asset, Font } from 'expo';
+import { put, call, all, takeLatest } from 'redux-saga/effects';
+import { Font } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AppDb from '../../db';
-import { LOAD_APP_ASSETS, LOAD_SQL_STORE } from '../actions/types';
+import { LAUNCH_APP } from '../actions/types';
 import { loadAppAssetsSuccess, setSqlStore } from '../actions/app';
-import { info, warn } from '../actions/logging';
+import { appSubmitLogin } from '../actions/user';
+import { info, warn, error } from '../actions/logging';
+
+function* initApp() {
+  yield call(loadAssetsAsync);
+  yield call(loadSqlStore);
+  yield put(appSubmitLogin());
+}
 
 function* loadAssetsAsync() {
   try {
     yield call(() => Promise.all([
-      Asset.loadAsync([
-        require('../../assets/images/robot-dev.png'), // eslint-disable-line global-require
-        require('../../assets/images/robot-prod.png'), // eslint-disable-line global-require
-      ]),
       Font.loadAsync([
         // This is the font that we are using for our tab bar
         Ionicons.font,
@@ -35,19 +38,19 @@ function* loadAssetsAsync() {
 }
 
 function* loadSqlStore() {
-  const db = new AppDb();
-  yield put(setSqlStore(db));
+  try {
+    const db = new AppDb();
+    yield call(db.init);
+    yield put(setSqlStore(db));
+  } catch (err) {
+    yield put(error(err));
+  }
 }
 
-function* watchLoadAppAssets() {
-  yield takeLatest(LOAD_APP_ASSETS, loadAssetsAsync);
-}
-
-function* watchLoadSqlStore() {
-  yield takeLatest(LOAD_SQL_STORE, loadSqlStore);
+function* watchLaunchApp() {
+  yield takeLatest(LAUNCH_APP, initApp);
 }
 
 export default [
-  watchLoadAppAssets,
-  watchLoadSqlStore,
+  watchLaunchApp,
 ];

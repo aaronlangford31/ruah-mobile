@@ -2,17 +2,25 @@ import { SQLite } from 'expo';
 import _ from 'underscore';
 import setupScript from './setupSql';
 
+let db = {};
 
 export default class AppDb {
   constructor() {
-    const db = SQLite.openDatabase('ruah.db');
-    db.transaction((tx) => {
-      const setups = setupScript.split(';');
-      _.each(setups.slice(0, setups.length - 1), (script) => tx.executeSql(script, null, () => console.log('success'), (err) => console.error(err)));
-    }, (err) => console.log('This is the error in openDatabase', err));
+    db = SQLite.openDatabase('ruah.db');
   }
+
+  init() {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        const setups = setupScript.split(';');
+        _.each(setups.slice(0, setups.length - 1), (script) => tx.executeSql(script));
+      },
+      (err) => reject(err),
+      () => resolve());
+    });
+  }
+
   setUserProps(user) {
-    const db = this.db;
     return new Promise((resolve, reject) => {
       const rows = _.map(user, (val, key) => [key, val]);
       const props = _.map(user, (val, key) => key);
@@ -35,7 +43,6 @@ export default class AppDb {
   }
 
   getUserProps(properties) {
-    const db = this.db;
     return new Promise((resolve, reject) => {
       const q = _.reduce(properties, (memo) => `${memo}${(memo === '' ? '' : ', ')}?`, '');
       db.transaction((tx) => {
@@ -67,7 +74,6 @@ export default class AppDb {
             reject(err);
           });
       }, (err) => {
-        console.log(' I am in getUserProps ', err);
         reject(err);
       });
     });
@@ -75,7 +81,6 @@ export default class AppDb {
 
 
   getConversations() {
-    const db = this.db;
     return new Promise((resolve, reject) => {
       db.transaction((tx) => {
         tx.executeSql(
@@ -115,7 +120,6 @@ export default class AppDb {
   }
 
   getMostLatestMessageRecord() {
-    const db = this.db;
     return new Promise((resolve, reject) => {
       db.transaction((tx) => {
         tx.executeSql(
@@ -133,7 +137,6 @@ export default class AppDb {
   }
 
   setConversations(conversations) {
-    const db = this.db;
     return new Promise((resolve, reject) => {
       const rows = _.map(conversations, (c) => [c.ConversationId, c.RecipientId]);
       const ids = _.map(conversations, (c) => c.ConversationId);
@@ -156,7 +159,6 @@ export default class AppDb {
   }
 
   insertMessage(message) {
-    const db = this.db;
     return new Promise((resolve, reject) => {
       const row = [message.ChannelId, message.Timestamp, message.Author, message.Recipient, message.Content];
       db.transaction((tx) => {
@@ -173,7 +175,6 @@ export default class AppDb {
   }
 
   setStores(stores) {
-    const db = this.db;
     return new Promise((resolve, reject) => {
       const rows = _.map(stores, (store) => [store.StoreId, store.Name, store.ProfilePicUri]);
       const ids = _.map(stores, (store) => store.StoreId);

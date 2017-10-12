@@ -1,12 +1,11 @@
 import React from 'react';
-import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator as tabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 import Messages from '../app/containers/Messages';
+import Catalog from '../app/containers/Catalog';
 import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 
 export default tabNavigator(
   {
@@ -16,33 +15,34 @@ export default tabNavigator(
     Messages: {
       screen: Messages,
     },
-    Settings: {
-      screen: SettingsScreen,
+    Catalog: {
+      screen: Catalog,
     },
   },
   {
     navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused }) => {
+      tabBarIcon: (config) => {
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
           case 'Messages':
-            iconName = 'md-mail'
+            iconName = 'md-mail';
             break;
           case 'Feed':
-            iconName = 'md-globe'
+            iconName = 'md-globe';
             break;
-          case 'Settings':
-            iconName = Platform.OS === 'ios'
-              ? `ios-options${focused ? '' : '-outline'}`
-              : 'md-options';
+          case 'Catalog':
+            iconName = 'md-apps';
+            break;
+          default:
+            break;
         }
         return (
           <Ionicons
             name={iconName}
             size={28}
             style={{ marginBottom: -3 }}
-            color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+            color={config.focused ? Colors.tabIconSelected : Colors.tabIconDefault}
           />
         );
       },
