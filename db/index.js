@@ -147,7 +147,7 @@ export default class AppDb {
           ids,
           (tx2) => {
             _.each(rows, (row) => {
-              tx2.executeSql('INSERT INTO Conversation (ConversationId, RecipientId) VALUES (?, ?);', row, () => console.log('insert succces'), (err) => console.log(err));
+              tx2.executeSql('INSERT INTO Conversation (ConversationId, RecipientId) VALUES (?, ?);', row, () => console.log('insert succces'), (err) => console.error(err));
             });
             resolve();
           }, (err) => reject(err)
@@ -185,7 +185,7 @@ export default class AppDb {
           ids,
           (tx2) => {
             _.each(rows, (row) => {
-              tx2.executeSql('INSERT INTO Store (StoreId, Name, ProfilePicUri) VALUES (?, ?, ?);', row, () => console.log('insert succces'), (err) => console.log(err));
+              tx2.executeSql('INSERT INTO Store (StoreId, Name, ProfilePicUri) VALUES (?, ?, ?);', row, () => console.log('insert succces'), (err) => console.error(err));
             });
             resolve();
           }, (err) => reject(err)

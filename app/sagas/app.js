@@ -1,4 +1,4 @@
-import { put, call, all, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest } from 'redux-saga/effects';
 import { Font } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AppDb from '../../db';

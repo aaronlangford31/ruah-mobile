@@ -38,19 +38,16 @@ class MainScreen extends React.Component {
   list() {
     return (
       <View style={styles.container}>
-        <Text style={styles.sectionTitle}>
-          Collections
-        </Text>
         <ScrollView>
           {_.map(this.props.collections, (collection) =>
             <View style={styles.collectionsContainer} key={collection.Id}>
-              <Image source={{ uri: collection.CoverImgUri }} style={styles.collectionCoverImg} resizeMode={'cover'} />
+              <Image source={{ uri: collection.CoverImgUri }} style={styles.collectionCoverImg} />
               <View style={styles.collectionTextContainer}>
-                <Text>
-                  {collection.Title}
+                <Text style={styles.collectionTitle}>
+                  {collection.Title} by {collection.Author}
                 </Text>
-                <Text>
-                  By {collection.Author}
+                <Text ellipsizeMode={'tail'} numberOfLines={2}>
+                  {collection.Description}
                 </Text>
                 <Text style={{ color: Colors.ray }}>
                   {moment(collection.Timestamp).fromNow()}
@@ -103,11 +100,11 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
+    alignItems: 'center',
   },
   collectionsContainer: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
     paddingBottom: 16,
   },
   collectionTextContainer: {
@@ -115,7 +112,12 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   collectionCoverImg: {
-    height: 300,
+    height: 325,
+    width: 325,
+  },
+  collectionTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 
